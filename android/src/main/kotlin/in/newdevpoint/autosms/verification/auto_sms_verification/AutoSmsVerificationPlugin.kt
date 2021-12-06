@@ -28,6 +28,7 @@ class AutoSmsVerificationPlugin : FlutterPlugin, MethodCallHandler, MySmsListene
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "auto_sms_verification")
         channel.setMethodCallHandler(this)
+        context = flutterPluginBinding.applicationContext
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {

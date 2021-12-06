@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:auto_sms_verification/auto_sms_verification.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,6 +14,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _smsCode = "";
+
   @override
   void initState() {
     super.initState();
@@ -28,7 +28,6 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
-
   Future<void> initPlatformState() async {
     var appSignature = await AutoSmsVerification.appSignature();
     print(['appSignature is ', appSignature]);
@@ -36,7 +35,6 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _smsCode = getCode(smsCode) ?? '';
     });
-
   }
 
   String? getCode(String? sms) {
@@ -48,7 +46,6 @@ class _MyAppState extends State<MyApp> {
     }
     return null;
   }
-
 
   @override
   Widget build(BuildContext context) {
