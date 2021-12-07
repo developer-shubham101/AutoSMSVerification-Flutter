@@ -20,7 +20,7 @@ class AutoSmsVerificationPlugin : FlutterPlugin, MethodCallHandler, MySmsListene
     /// when the Flutter Engine is detached from the Activity
     private lateinit var channel: MethodChannel
 
-    private var mResult: MethodChannel.Result? = null
+    private var mResult: Result? = null
     private var receiver: SmsBroadcastReceiver? = null
     private var alreadyCalledSmsRetrieve = false
     private lateinit var context: Context
