@@ -1,3 +1,3 @@
-## 0.0.4
+## 0.0.5
 
-* kotlin version updated
+* Fixed Crash on Android 14

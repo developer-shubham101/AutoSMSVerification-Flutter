@@ -38,6 +38,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   String? getCode(String? sms) {
+    print("SMS: ${sms}");
     if (sms != null) {
       final intRegex = RegExp(r'\d+', multiLine: true);
       final code = intRegex.allMatches(sms).first.group(0);

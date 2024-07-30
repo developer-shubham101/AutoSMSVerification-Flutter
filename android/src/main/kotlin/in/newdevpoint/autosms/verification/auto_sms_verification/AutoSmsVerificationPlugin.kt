@@ -5,6 +5,7 @@ import android.content.IntentFilter
 import android.util.Log
 import androidx.annotation.NonNull
 import com.google.android.gms.auth.api.phone.SmsRetriever
+import android.os.Build
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -37,16 +38,19 @@ class AutoSmsVerificationPlugin : FlutterPlugin, MethodCallHandler, MySmsListene
                 val signature = AppSignatureHelper(this.context).getAppSignatures()[0]
                 result.success(signature)
             }
+
             "startListening" -> {
                 this.mResult = result
                 receiver = SmsBroadcastReceiver()
                 startListening()
 
             }
+
             "stopListening" -> {
                 alreadyCalledSmsRetrieve = false
                 unregister()
             }
+
             else -> result.notImplemented()
         }
     }
@@ -56,16 +60,24 @@ class AutoSmsVerificationPlugin : FlutterPlugin, MethodCallHandler, MySmsListene
     }
 
     private fun startListening() {
-        val client = SmsRetriever.getClient(this.context /* context */)
+        val client = SmsRetriever.getClient(this.context)
         val task = client.startSmsRetriever()
         task.addOnSuccessListener {
             // Successfully started retriever, expect broadcast intent
             Log.e(javaClass::getSimpleName.name, "task started")
             receiver?.setSmsListener(this)
-            this.context.registerReceiver(
-                receiver,
-                IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                this.context.registerReceiver(
+                    receiver,
+                    IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION),
+                    Context.RECEIVER_EXPORTED
+                )
+            } else {
+                this.context.registerReceiver(
+                    receiver,
+                    IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
+                )
+            }
         }
     }
 
