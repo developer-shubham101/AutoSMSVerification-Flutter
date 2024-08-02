@@ -1,6 +1,6 @@
 name: auto_sms_verification
-description: The Flutter package provides seamless integration of the SMS Retriever API for automatic SMS verification on the Android platform. This package allows your Android application to automatically read OTPs (One-Time Passwords) without requiring manual user input, enhancing the user experience by streamlining the verification process. With this package, you can ensure secure and efficient OTP handling directly within your Flutter application.
-version: 0.0.5
+description: Flutter package for automatic OTP verification using SMS Retriever API, enhancing user experience on Android.
+version: 0.0.7
 homepage: https://github.com/developer-shubham101/AutoSMSVerification-Flutter
 
 environment:
