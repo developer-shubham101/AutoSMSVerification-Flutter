@@ -26,13 +26,13 @@ class AutoSmsVerificationPlugin : FlutterPlugin, MethodCallHandler, MySmsListene
     private var alreadyCalledSmsRetrieve = false
     private lateinit var context: Context
 
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "auto_sms_verification")
         channel.setMethodCallHandler(this)
         context = flutterPluginBinding.applicationContext
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
             "appSignature" -> {
                 val signature = AppSignatureHelper(this.context).getAppSignatures()[0]
@@ -51,11 +51,15 @@ class AutoSmsVerificationPlugin : FlutterPlugin, MethodCallHandler, MySmsListene
                 unregister()
             }
 
+            "getPlatformVersion" -> {
+                result.success("Android ${android.os.Build.VERSION.RELEASE}")
+            }
+
             else -> result.notImplemented()
         }
     }
 
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
     }
 

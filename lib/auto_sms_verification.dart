@@ -2,8 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'auto_sms_verification_platform_interface.dart';
 
 class AutoSmsVerification {
+  Future<String?> getPlatformVersion() {
+    return AutoSmsVerificationPlatform.instance.getPlatformVersion();
+  }
+
   static const MethodChannel _channel =
       const MethodChannel('auto_sms_verification');
 

@@ -26,8 +26,6 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
                     mySmsListener?.apply {
                         onOtpReceived(message = sms)
                     }
-
-
                 }
 
                 CommonStatusCodes.TIMEOUT -> {
@@ -45,7 +43,6 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
 interface MySmsListener {
     fun onOtpReceived(message: String?)
     fun onOtpTimeout()
-
 }
 
 
