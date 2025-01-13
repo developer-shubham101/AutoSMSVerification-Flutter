@@ -1,18 +1,29 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:auto_sms_verification/auto_sms_verification.dart';
+import 'package:auto_sms_verification/auto_sms_verification_platform_interface.dart';
+import 'package:auto_sms_verification/auto_sms_verification_method_channel.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+
+class MockAutoSmsVerificationPlatform
+    with MockPlatformInterfaceMixin
+    implements AutoSmsVerificationPlatform {
+
+  @override
+  Future<String?> getPlatformVersion() => Future.value('42');
+}
 
 void main() {
-  const MethodChannel channel = MethodChannel('auto_sms_verification');
+  final AutoSmsVerificationPlatform initialPlatform = AutoSmsVerificationPlatform.instance;
 
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
-    });
+  test('$MethodChannelAutoSmsVerification is the default instance', () {
+    expect(initialPlatform, isInstanceOf<MethodChannelAutoSmsVerification>());
   });
 
-  tearDown(() {
-    channel.setMockMethodCallHandler(null);
+  test('getPlatformVersion', () async {
+    AutoSmsVerification autoSmsVerificationPlugin = AutoSmsVerification();
+    MockAutoSmsVerificationPlatform fakePlatform = MockAutoSmsVerificationPlatform();
+    AutoSmsVerificationPlatform.instance = fakePlatform;
+
+    expect(await autoSmsVerificationPlugin.getPlatformVersion(), '42');
   });
 }

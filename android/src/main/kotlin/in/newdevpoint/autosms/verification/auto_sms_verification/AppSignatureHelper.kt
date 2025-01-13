@@ -1,14 +1,16 @@
 package `in`.newdevpoint.autosms.verification.auto_sms_verification
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Base64
 import android.util.Log
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.util.*
+import java.util.Arrays
 
 class AppSignatureHelper(context: Context) : ContextWrapper(context) {
 
@@ -26,15 +28,25 @@ class AppSignatureHelper(context: Context) : ContextWrapper(context) {
             // Get all package signatures for the current package
             val packageName = packageName
             val packageManager = packageManager
-            val signatures = packageManager.getPackageInfo(
-                packageName,
-                PackageManager.GET_SIGNATURES
-            ).signatures
+
+
+            val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+            } else {
+                packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            }
+            val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                packageInfo.signingInfo?.apkContentsSigners
+            } else {
+                packageInfo.signatures
+            }
+
 
             // For each signature create a compatible hash
-            signatures
-                .mapNotNull { hash(packageName, it.toCharsString()) }
-                .mapTo(appCodes) { it }
+            signatures?.mapNotNull {
+                hash(packageName, it.toCharsString())
+            }?.mapTo(appCodes) { it }
+
             return appCodes
         } catch (e: PackageManager.NameNotFoundException) {
             Log.e(TAG, "Unable to find package to obtain hash.", e)
